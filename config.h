@@ -3,12 +3,12 @@
 #include "moveresize.c"
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 8;        /* gaps between windows */
+static const unsigned int gappx     = 0;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 
-static const double defaultopacity  = 0.94;
+static const double defaultopacity  = 1;
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
@@ -18,14 +18,14 @@ static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
 
 /* solarized colors http://ethanschoonover.com/solarized */
-static const char s_base03[]        = "#002b36";
-static const char s_base02[]        = "#073642";
-static const char s_base01[]        = "#586e75";
-static const char s_base00[]        = "#657b83";
+static const char s_base03[]        = "#282828";
+static const char s_base02[]        = "#3c3836";
+static const char s_base01[]        = "#504945";
+static const char s_base00[]        = "#665c54";
 static const char s_base0[]         = "#839496";
-static const char s_base1[]         = "#93a1a1";
+static const char s_base1[]         = "#d79921";
 static const char s_base2[]         = "#eee8d5";
-static const char s_base3[]         = "#fdf6e3";
+static const char s_base3[]         = "#a89984";
 
 static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
@@ -33,17 +33,17 @@ static const unsigned int borderalpha = OPAQUE;
 	     /* SchemeSel dark */
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { s_base0, s_base03, s_base03 },
-	[SchemeSel]  = { s_base00, s_base02, s_base00 },
+	[SchemeNorm] = { s_base3, s_base03, s_base03 },
+	[SchemeSel]  = { s_base1, s_base03, s_base02 },
 };
 static const unsigned int alphas[][3]      = {
-	/*               fg      bg        border     */
+/* 	/1*               fg      bg        border     *1/ */
 	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
 	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
 };
 
 /* tagging  */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "", ""};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -52,7 +52,8 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 3,       0,           -1 },
+	{ "qutebrowser",  NULL,       NULL,       1 << 3,       0,           -1 },
 };
 
 /* layout(s) */
@@ -62,9 +63,9 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
+	{ "",      tile },    /* first entry is default */
+	{ "",      NULL },    /* no layout function means floating behavior */
+	{ "M",      monocle },
 };
 
 /* key definitions */
@@ -82,26 +83,26 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char scratchpadname[] = "scratchpad";
-static const char *scratchpadterm[] = { "st", "-t", scratchpadname, "-g", "80x24", "-e", "tmuxTerm.sh", NULL };
-static const char *scratchpadnote[] = { "st", "-t", scratchpadname, "-g", "80x24", "-e", "tmux" ,NULL };
+static const char scratchpadname[] = "scratchpadterm";
+static const char scratchpadnotename[] = "scratchpadnote";
+static const char *scratchpadterm[] = { "st", "-t", scratchpadname, "-g", "80x24", "-e", "launchTmux", "scratch", "", NULL };
 
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
 
 	{ MODKEY,                       XK_u,      togglescratch,  {.v = scratchpadterm } },
-	{ MODKEY|ShiftMask,		XK_s,	   spawn,	   SHCMD("transset -a --dec .1") },
-	{ MODKEY|ShiftMask,		XK_d,	   spawn,	   SHCMD("transset -a --inc .1") },
-	{ MODKEY|ShiftMask,		XK_f,	   spawn,	   SHCMD("transset -a .94") },
-	{ MODKEY|ShiftMask,                       XK_b,      togglebar,      {0} },
+	{ MODKEY|ShiftMask,				XK_s,	   spawn,		   SHCMD("transset -a --dec .1") },
+	{ MODKEY|ShiftMask,				XK_d,	   spawn,		   SHCMD("transset -a --inc .1") },
+	{ MODKEY|ShiftMask,				XK_f,	   spawn,		   SHCMD("transset -a .94") },
+	{ MODKEY|ShiftMask,             XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_g,      zoom,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+/*	{ MODKEY,                       XK_space,  setlayout,      {1} }, */
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
@@ -121,10 +122,6 @@ static Key keys[] = {
 	TAGKEYS(                        XK_7,                      6)
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-
-
-
 
 	{ MODKEY,					XK_Down,	moveresize,		{.v = (int []){ 0, 25, 0, 0 }}},
 	{ MODKEY,					XK_Up,		moveresize,		{.v = (int []){ 0, -25, 0, 0 }}},
@@ -137,7 +134,7 @@ static Key keys[] = {
 
 };
 
-/* button definitions */
+/* bssutton definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
