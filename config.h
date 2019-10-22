@@ -61,16 +61,21 @@ static const char *newsboatcmd[]  = { "st", "-e", "newsboat", "-u", "$HOME/.loca
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
+
+	/* Basic */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
-
-	/* Functions */
-	{ MODKEY,                       XK_q,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 
 	/* Apps */
 	{ MODKEY,                       XK_e,      spawn,          {.v = neomuttcmd } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = newsboatcmd } },
+
+	/* Tmux apps */
+
+
+	/* Functions */
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
 };
 
 /* button definitions */
