@@ -57,7 +57,21 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *neomuttcmd[]  = { "st", "-e", "neomutt", NULL };
-static const char *newsboatcmd[]  = { "st", "-e", "newsboat", "-u", "$HOME/.local/share/newsboat/urls", NULL };
+static const char *lfcmd[]  = { "st", "-e", "lf", NULL };
+static const char *firefoxcmd[]  = { "firefox", NULL };
+static const char *newsboatcmd[]  = { "st", "-e", "newsboat", "-u", "/home/gian/.local/share/newsboat/urls"};
+static const char *cmuscmd[]  = { "st", "-e", "starttmux", "music", "cmus", NULL };
+static const char *calcursecmd[]  = { "st", "-e", "starttmux", "calendar", "calcurse", NULL };
+static const char *matlabcmd[]  = { "st", "-e", "starttmux", "matlab", "lf $REPOS/matlab", NULL };
+static const char *w3mcmd[]  = { "st", "-e", "starttmux", "web", "w3m -v", NULL };
+static const char *weechatcmd[]  = { "st", "-e", "starttmux", "chat", "weechat -d $HOME/.config/weechat", NULL };
+static const char *nmtuicmd[]  = { "st", "-e", "nmtui", NULL };
+static const char *vimwikicmd[]  = { "st", "-e", "nvim", "-c", "VimwikiIndex", NULL };
+static const char *checkstatusgitcmd[]  = { "checkstatusgit", "--dmenu", NULL };
+static const char *recordcmd[]  = { "record", NULL };
+static const char *dmountcmd[]  = { "dmount", NULL };
+static const char *dunmountcmd[]  = { "dunmount", NULL };
+static const char *maimpickcmd[]  = { "maimpick", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -68,14 +82,33 @@ static Key keys[] = {
 
 	/* Apps */
 	{ MODKEY,                       XK_e,      spawn,          {.v = neomuttcmd } },
+	{ MODKEY,                       XK_r,      spawn,          {.v = lfcmd } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = newsboatcmd } },
+	{ MODKEY,                       XK_v,      spawn,          {.v = vimwikicmd } },
+	{ MODKEY|ShiftMask,             XK_w,      spawn,          {.v = firefoxcmd } },
+
+	/* TODO: Brainstorm */
 
 	/* Tmux apps */
+	{ MODKEY,                       XK_m,      spawn,          {.v = cmuscmd } },
+	{ MODKEY,                       XK_w,      spawn,          {.v = w3mcmd } },
+	{ MODKEY,                       XK_y,      spawn,          {.v = calcursecmd } },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = matlabcmd } },
+	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = weechatcmd } },
+
 
 
 	/* Functions */
+	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,                       XK_F1,     spawn,          { .v = checkstatusgitcmd } },
+	{ MODKEY,                       XK_F5,     spawn,          { .v = dmountcmd } },
+	{ MODKEY,                       XK_F6,     spawn,          { .v = dunmountcmd } },
+	{ MODKEY,                       XK_Print,  spawn,          { .v = recordcmd } },
+	{ ShiftMask,                    XK_Print,  spawn,          { .v = maimpickcmd } },
+	{ MODKEY,                       XK_F12,    spawn,          { .v = nmtuicmd } },
 };
 
 /* button definitions */
