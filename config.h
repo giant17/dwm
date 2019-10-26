@@ -1,5 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
@@ -61,6 +63,7 @@ static const char *lfcmd[]  = { "st", "-e", "lf", NULL };
 static const char *firefoxcmd[]  = { "firefox", NULL };
 static const char *newsboatcmd[]  = { "st", "-e", "newsboat", "-u", "/home/gian/.local/share/newsboat/urls"};
 static const char *cmuscmd[]  = { "st", "-e", "starttmux", "music", "cmus", NULL };
+static const char *tmuxtermcmd[]  = { "st", "-e", "starttmux", "term", "", NULL };
 static const char *calcursecmd[]  = { "st", "-e", "starttmux", "calendar", "calcurse", NULL };
 static const char *matlabcmd[]  = { "st", "-e", "starttmux", "matlab", "lf $REPOS/matlab", NULL };
 static const char *w3mcmd[]  = { "st", "-e", "starttmux", "web", "w3m -v", NULL };
@@ -69,9 +72,16 @@ static const char *nmtuicmd[]  = { "st", "-e", "nmtui", NULL };
 static const char *vimwikicmd[]  = { "st", "-e", "nvim", "-c", "VimwikiIndex", NULL };
 static const char *checkstatusgitcmd[]  = { "checkstatusgit", "--dmenu", NULL };
 static const char *recordcmd[]  = { "record", NULL };
+static const char *launchertmuxcmd[]  = { "launchertmux", NULL };
 static const char *dmountcmd[]  = { "dmount", NULL };
 static const char *dunmountcmd[]  = { "dunmount", NULL };
+static const char *dunicodecmd[]  = { "dunicode", NULL };
 static const char *maimpickcmd[]  = { "maimpick", NULL };
+
+static const char *mutecmd[] = { "lmc", "mute", NULL};
+static const char *volupcmd[] = { "lmc", "up", "5", NULL };
+static const char *voldowncmd[] = { "lmc", "down", "5", NULL };
+
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -79,6 +89,7 @@ static Key keys[] = {
 	/* Basic */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = tmuxtermcmd } },
 
 	/* Apps */
 	{ MODKEY,                       XK_e,      spawn,          {.v = neomuttcmd } },
@@ -87,7 +98,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_v,      spawn,          {.v = vimwikicmd } },
 	{ MODKEY|ShiftMask,             XK_w,      spawn,          {.v = firefoxcmd } },
 
-	/* TODO: Brainstorm */
+	/* TODO: Set Brainstorm Shortcut */
+	/* Open in already opened tmux Matlab session */
 
 	/* Tmux apps */
 	{ MODKEY,                       XK_m,      spawn,          {.v = cmuscmd } },
@@ -103,12 +115,21 @@ static Key keys[] = {
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ MODKEY,                       XK_space,  spawn,          { .v = launchertmuxcmd } },
 	{ MODKEY,                       XK_F1,     spawn,          { .v = checkstatusgitcmd } },
+	{ MODKEY,                       XK_F4,     spawn,          { .v = dunicodecmd } },
 	{ MODKEY,                       XK_F5,     spawn,          { .v = dmountcmd } },
 	{ MODKEY,                       XK_F6,     spawn,          { .v = dunmountcmd } },
 	{ MODKEY,                       XK_Print,  spawn,          { .v = recordcmd } },
 	{ ShiftMask,                    XK_Print,  spawn,          { .v = maimpickcmd } },
 	{ MODKEY,                       XK_F12,    spawn,          { .v = nmtuicmd } },
+
+	/* TODO: Set Volume keys */
+
+	{ 0, XF86XK_AudioMute, spawn, {.v = mutecmd } },
+	{ 0, XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd } },
+	{ 0, XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd } },
+
 };
 
 /* button definitions */
